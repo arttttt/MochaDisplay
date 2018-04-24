@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MochaDisplay</string>
+    <string name="minimum_kelvins">Min: %dK</string>
+    <string name="maximum_kelvins">Max: %dK</string>
+</resources>
