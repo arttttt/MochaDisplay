@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.LiveDisplayFragment">
+
+    <TextView
+        android:id="@+id/temperatureModeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/temperature_mode_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Spinner
+        android:id="@+id/modeSelector"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/temperatureModeText" />
+
+    <TextView
+        android:id="@+id/dayTemperatureTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/temperature_day_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/modeSelector" />
+
+    <TextView
+        android:id="@+id/dayTemperatureMinTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/minimum_kelvins"
+        app:layout_constraintBottom_toBottomOf="@+id/dayTemperature"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dayTemperature" />
+
+    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+        android:id="@+id/dayTemperature"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:dsb_indicatorFormatter="%dK"
+        app:dsb_max="@integer/max_kelvins"
+        app:dsb_min="@integer/min_kelvins"
+        app:layout_constraintEnd_toStartOf="@+id/dayTemperatureMaxTitle"
+        app:layout_constraintStart_toEndOf="@+id/dayTemperatureMinTitle"
+        app:layout_constraintTop_toBottomOf="@+id/dayTemperatureTitle" />
+
+    <TextView
+        android:id="@+id/dayTemperatureMaxTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="@string/maximum_kelvins"
+        app:layout_constraintBottom_toBottomOf="@+id/dayTemperature"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/dayTemperature" />
+
+    <TextView
+        android:id="@+id/nighTemperatureTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/temperature_night_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dayTemperature" />
+
+    <TextView
+        android:id="@+id/nightTemperatureMinTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/minimum_kelvins"
+        app:layout_constraintBottom_toBottomOf="@+id/nightTemperature"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/nightTemperature" />
+
+    <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+        android:id="@+id/nightTemperature"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:dsb_indicatorFormatter="%dK"
+        app:dsb_max="@integer/max_kelvins"
+        app:dsb_min="@integer/min_kelvins"
+        app:layout_constraintEnd_toStartOf="@+id/nightTemperatureMaxTitle"
+        app:layout_constraintStart_toEndOf="@+id/nightTemperatureMinTitle"
+        app:layout_constraintTop_toBottomOf="@+id/nighTemperatureTitle" />
+
+    <TextView
+        android:id="@+id/nightTemperatureMaxTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/maximum_kelvins"
+        app:layout_constraintBottom_toBottomOf="@+id/nightTemperature"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/nightTemperature" />
+
+</android.support.constraint.ConstraintLayout>

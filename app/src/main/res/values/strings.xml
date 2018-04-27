@@ -2,4 +2,14 @@
     <string name="app_name">MochaDisplay</string>
     <string name="minimum_kelvins">Min: %dK</string>
     <string name="maximum_kelvins">Max: %dK</string>
+    <string name="temperature_day_text">Day temperature</string>
+    <string name="temperature_night_text">Night temperature</string>
+    <string name="temperature_mode_text">Mode</string>
+
+    <string-array name="live_display_modes">
+        <item>Auto</item>
+        <item>Day</item>
+        <item>Night</item>
+        <item>Disabled</item>
+    </string-array>
 </resources>
