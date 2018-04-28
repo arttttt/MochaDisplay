@@ -10,23 +10,18 @@ import org.joda.time.DateTimeFieldType
 import org.joda.time.DateTime
 import org.joda.time.Interval
 
-class LiveDisplayAlarmManager(private val mContext: Context, private val mColorManager: ColorManager) {
-    fun createEventAndRegister() {
+class LiveDisplayAlarmManager(private val mContext: Context) {
+    fun createEventAndRegister(temperature: Int) {
         val service = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(mContext, LiveDisplayAlarmReceiver::class.java)
         intent.action = Constants.alarmAction
 
         var start = DateTime()
-        val dayTime = LiveDisplayTimeUtils.instance.getDayType()
-        val temperature = when (dayTime) {
-            LiveDisplayTimeUtils.TimeType.DAY -> mColorManager.getColor(mContext, LiveDisplayTimeUtils.TimeType.DAY)
-            else -> mColorManager.getColor(mContext, LiveDisplayTimeUtils.TimeType.NIGHT)
-        }
 
         intent.putExtra(Constants.intentExtraTemperature, temperature)
         val pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
-        var end  = when (dayTime) {
+        val end  = when (LiveDisplayTimeUtils.instance.getTimeType()) {
             LiveDisplayTimeUtils.TimeType.DAY -> {
                 DateTime(start.get(DateTimeFieldType.year()),
                         start.get(DateTimeFieldType.monthOfYear()),
@@ -57,7 +52,7 @@ class LiveDisplayAlarmManager(private val mContext: Context, private val mColorM
         val service = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(mContext, LiveDisplayAlarmReceiver::class.java)
         intent.action = Constants.alarmAction
-        var pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
         service.cancel(pendingIntent)
         Log.d(Constants.TAG, "DESTROYED")
     }

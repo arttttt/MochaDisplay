@@ -3,17 +3,16 @@ package com.arttt.mochadisplay
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.arttt.mochadisplay.utils.*
 
 class LiveDisplayAlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         SU.instance.getSuAccessSync()
         val colorManager = ColorManager(SU.instance)
-        val liveDisplayAlarmManager = LiveDisplayAlarmManager(context, colorManager)
+        val liveDisplayAlarmManager = LiveDisplayAlarmManager(context)
         val temperature = when (intent.action) {
             Intent.ACTION_BOOT_COMPLETED -> {
-                colorManager.getColor(context, LiveDisplayTimeUtils.instance.getDayType())
+                colorManager.getColor(context, LiveDisplayTimeUtils.instance.getTimeType())
             }
             Constants.alarmAction -> {
                 intent.getIntExtra(Constants.intentExtraTemperature,
@@ -23,7 +22,7 @@ class LiveDisplayAlarmReceiver: BroadcastReceiver() {
         }
 
         colorManager.setTemperature(temperature)
-        liveDisplayAlarmManager.createEventAndRegister()
+        liveDisplayAlarmManager.createEventAndRegister(temperature)
         SU.instance.close()
     }
 }

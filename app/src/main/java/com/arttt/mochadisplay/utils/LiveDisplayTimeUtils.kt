@@ -15,7 +15,7 @@ class LiveDisplayTimeUtils {
         DAY, NIGHT
     }
 
-    fun getDayType(): TimeType {
+    fun getTimeType(): TimeType {
         return if (DateTime().get(DateTimeFieldType.hourOfDay()) in 9..19)
             TimeType.DAY
         else
