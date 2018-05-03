@@ -7,9 +7,7 @@
     <string name="temperature_mode_text">Mode</string>
 
     <string-array name="live_display_modes">
-        <item>Auto</item>
-        <item>Day</item>
-        <item>Night</item>
+        <item>Enabled</item>
         <item>Disabled</item>
     </string-array>
 </resources>

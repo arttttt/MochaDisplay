@@ -1,14 +1,12 @@
 package com.arttt.mochadisplay.utils
 
-import android.graphics.Color
-
-class ImageUtils {
+class ColorUtils {
     companion object {
         val instance by lazy {
-            ImageUtils()
+            ColorUtils()
         }
     }
-    fun getRGBFromK(temperature: Int): Color {
+    fun getRGBFromK(temperature: Int): ColorCompat {
         var x = temperature / 1000.0
         if (x > 40) {
             x = 40.0
@@ -18,12 +16,12 @@ class ImageUtils {
         var blue: Double
 
         // R
-        red = if (temperature < 6527) {
-            1.0
-        } else {
-            val redPoly = doubleArrayOf(4.93596077e0, -1.29917429e0, 1.64810386e-01, -1.16449912e-02, 4.86540872e-04, -1.19453511e-05, 1.59255189e-07, -8.89357601e-10)
-            poly(redPoly, x)
-
+        red = when {
+            temperature < 6527 -> 1.0
+            else -> {
+                val redPoly = doubleArrayOf(4.93596077e0, -1.29917429e0, 1.64810386e-01, -1.16449912e-02, 4.86540872e-04, -1.19453511e-05, 1.59255189e-07, -8.89357601e-10)
+                poly(redPoly, x)
+            }
         }
         // G
         green = when {
@@ -48,9 +46,9 @@ class ImageUtils {
         }
 
         red = clamp(red, 0.0, 1.0)
-        blue = clamp(blue, 0.0, 1.0)
         green = clamp(green, 0.0, 1.0)
-        return Color.valueOf(red.toFloat(), green.toFloat(), blue.toFloat())
+        blue = clamp(blue, 0.0, 1.0)
+        return ColorCompat(red, green, blue)
     }
 
     private fun poly(coefficients: DoubleArray, x: Double): Double {
@@ -72,4 +70,6 @@ class ImageUtils {
             max
         } else x
     }
+
+    data class ColorCompat(val red: Double, val green: Double, val blue: Double)
 }

@@ -1,5 +1,6 @@
 package com.arttt.mochadisplay.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -17,10 +18,10 @@ import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
 class LiveDisplayFragment : Fragment() {
 
     lateinit var mColorManager: ColorManager
+    lateinit var mLiveDisplayAlarmManager: LiveDisplayAlarmManager
 
     companion object {
         fun newInstance(): LiveDisplayFragment {
-            SU.instance.getSuAccessSync()
             return LiveDisplayFragment()
         }
     }
@@ -38,8 +39,30 @@ class LiveDisplayFragment : Fragment() {
             modeSelector.adapter = this
         }
 
+        mColorManager = ColorManager(context!!, SU.instance)
+        mLiveDisplayAlarmManager = LiveDisplayAlarmManager(context!!)
+
+        val prefs = context!!.getSharedPreferences(Constants.prefsTitle, Context.MODE_PRIVATE)
+
+        val selectedIndex = when (prefs.getInt(Constants.prefsLiveDisplayEnabled, 0)) {
+            0 -> 1
+            else -> 0
+        }
+        modeSelector.setSelection(selectedIndex)
+
         modeSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {}
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                when (position) {
+                    0 -> {
+                        mLiveDisplayAlarmManager.createEventAndRegister()
+                        prefs.edit().putInt(Constants.prefsLiveDisplayEnabled, 1).apply()
+                    }
+                    1 -> {
+                        mLiveDisplayAlarmManager.removeEvent()
+                        prefs.edit().putInt(Constants.prefsLiveDisplayEnabled, 0).apply()
+                    }
+                }
+            }
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
@@ -59,8 +82,6 @@ class LiveDisplayFragment : Fragment() {
             }
         }
 
-        mColorManager = ColorManager(SU.instance)
-
         val progressChangeListener = object : DiscreteSeekBar.OnProgressChangeListener {
             override fun onProgressChanged(seekBar: DiscreteSeekBar, value: Int, fromUser: Boolean) {}
 
@@ -69,10 +90,10 @@ class LiveDisplayFragment : Fragment() {
             override fun onStopTrackingTouch(seekBar: DiscreteSeekBar) {
                 when (seekBar) {
                     dayTemperature -> {
-                        mColorManager.saveColor(context!!, seekBar.progress * 100, LiveDisplayTimeUtils.TimeType.DAY)
+                        mColorManager.saveColor(seekBar.progress * 100, LiveDisplayTimeUtils.TimeType.DAY)
                     }
                     nightTemperature -> {
-                        mColorManager.saveColor(context!!, seekBar.progress * 100, LiveDisplayTimeUtils.TimeType.NIGHT)
+                        mColorManager.saveColor(seekBar.progress * 100, LiveDisplayTimeUtils.TimeType.NIGHT)
                     }
                 }
             }
@@ -80,9 +101,9 @@ class LiveDisplayFragment : Fragment() {
 
         dayTemperature.numericTransformer = numTransformer
         dayTemperature.setOnProgressChangeListener(progressChangeListener)
-        dayTemperature.progress = mColorManager.getColor(context!!, LiveDisplayTimeUtils.TimeType.DAY) / 100
+        dayTemperature.progress = mColorManager.getColor(LiveDisplayTimeUtils.TimeType.DAY) / 100
         nightTemperature.numericTransformer = numTransformer
         nightTemperature.setOnProgressChangeListener(progressChangeListener)
-        nightTemperature.progress = mColorManager.getColor(context!!, LiveDisplayTimeUtils.TimeType.NIGHT) / 100
+        nightTemperature.progress = mColorManager.getColor(LiveDisplayTimeUtils.TimeType.NIGHT) / 100
     }
 }

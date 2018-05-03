@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.content.Context
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import com.arttt.mochadisplay.LiveDisplayAlarmReceiver
 import org.joda.time.DateTimeFieldType
@@ -11,14 +12,14 @@ import org.joda.time.DateTime
 import org.joda.time.Interval
 
 class LiveDisplayAlarmManager(private val mContext: Context) {
-    fun createEventAndRegister(temperature: Int) {
+    fun createEventAndRegister() {
+        removeEvent()
         val service = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(mContext, LiveDisplayAlarmReceiver::class.java)
         intent.action = Constants.alarmAction
 
         var start = DateTime()
 
-        intent.putExtra(Constants.intentExtraTemperature, temperature)
         val pendingIntent = PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         val end  = when (LiveDisplayTimeUtils.instance.getTimeType()) {
@@ -44,11 +45,15 @@ class LiveDisplayAlarmManager(private val mContext: Context) {
         val interval = Interval(start, end)
         start = start.plus(interval.toDurationMillis())
 
-        service.set(AlarmManager.RTC_WAKEUP, start.millis, pendingIntent)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            service.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, start.millis, pendingIntent)
+        } else {
+            service.set(AlarmManager.RTC_WAKEUP, start.millis, pendingIntent)
+        }
         Log.d(Constants.TAG, "CREATED")
     }
 
-    fun cancelJob() {
+    fun removeEvent() {
         val service = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(mContext, LiveDisplayAlarmReceiver::class.java)
         intent.action = Constants.alarmAction

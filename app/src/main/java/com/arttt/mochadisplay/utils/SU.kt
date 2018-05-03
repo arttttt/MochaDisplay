@@ -3,9 +3,15 @@ package com.arttt.mochadisplay.utils
 import android.util.Log
 import com.arttt.mochadisplay.emptyString
 import com.arttt.mochadisplay.space
+import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.experimental.runBlocking
 import java.io.*
 
 class SU {
+
+    interface OnSuAccessListener {
+        fun onSuAccess(rooted: Boolean)
+    }
 
     companion object {
         val instance by lazy {
@@ -17,7 +23,14 @@ class SU {
     private lateinit var mWriter: BufferedWriter
     private var mDenied: Boolean = false
 
-    fun getSuAccessSync(): Boolean {
+    fun getSuAccessAsync(callback: OnSuAccessListener) {
+        val rooted = runBlocking {
+            getSuAccessSync()
+        }
+        callback.onSuAccess(rooted)
+    }
+
+    private fun getSuAccessSync(): Boolean {
         return getSuAccess() && rootAccess()
     }
 
